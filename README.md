@@ -1,104 +1,117 @@
 
-/* In any language program mostly syntax error occurs due to unbalancing delimiter such as
-(), {}, []. Write C++ program using stack to check whether given expression is well
-parenthesized or not. */
+
+```cpp
+/* A palindrome is a string of characters that‘s the same forward and backward. Typically,
+punctuation, capitalization, and spaces are ignored. For example, “Poor Dan is in a droop”
+is a palindrome, as can be seen by examining the characters “poordanisinaroop” and
+observing that they are the same forward and backward.
+
+One way to check for a palindrome is to reverse the characters in the string and then
+compare with the original. In a palindrome, the sequence will be identical.
+
+Write a C++ program with functions:
+a) To print the original string followed by the reversed string using a stack.
+b) To check whether the given string is a palindrome or not.
+*/
 
 #include <iostream>
+#include <string.h>
+#define MAX 50
 using namespace std;
-#define size 10
 
-class stackexp {
+class STACK {
+private:
+    char a[MAX];
     int top;
-    char stk[size];
 
 public:
-    stackexp() {
+    STACK() {
         top = -1;
     }
 
     void push(char);
-    char pop();
-    int isfull();
-    int isempty();
+    void reverse();
+    void convert(char[]);
+    void palindrome();
 };
 
-void stackexp::push(char x) {
-    top = top + 1;
-    stk[top] = x;
+void STACK::push(char c) {
+    top++;
+    a[top] = c;
+    a[top + 1] = '\0';
+    cout << endl << c << " is pushed on stack...";
 }
 
-char stackexp::pop() {
-    char s;
-    s = stk[top];
-    top = top - 1;
-    return s;
+void STACK::reverse() {
+    char str[MAX];
+    cout << "\n\nReverse string is: ";
+    for (int i = top, j = 0; i >= 0; i--, j++) {
+        cout << a[i];
+        str[j] = a[i];
+    }
+    cout << endl;
 }
 
-int stackexp::isfull() {
-    if (top == size - 1)
-        return 1;
+void STACK::convert(char str[]) {
+    int j, k, len = strlen(str);
+    for (j = 0, k = 0; j < len; j++) {
+        // Convert only alphabets to lowercase and remove other characters
+        if (((int)str[j] >= 97 && (int)str[j] <= 122) || ((int)str[j] >= 65 && (int)str[j] <= 90)) {
+            if ((int)str[j] <= 90) {
+                str[k] = (char)((int)str[j] + 32);
+            } else {
+                str[k] = str[j];
+            }
+            k++;
+        }
+    }
+    str[k] = '\0';
+    cout << endl << "Converted String: " << str << "\n";
+}
+
+void STACK::palindrome() {
+    char str[MAX];
+    int i, j;
+
+    for (i = top, j = 0; i >= 0; i--, j++) {
+        str[j] = a[i];
+    }
+    str[j] = '\0';
+
+    if (strcmp(str, a) == 0)
+        cout << "\n\nString is palindrome...";
     else
-        return 0;
-}
-
-int stackexp::isempty() {
-    if (top == -1)
-        return 1;
-    else
-        return 0;
+        cout << "\n\nString is not palindrome...";
 }
 
 int main() {
-    stackexp s1;
-    char exp[20], ch;
+    STACK stack;
+    char str[MAX];
     int i = 0;
 
-    cout << "\n\t!! Parenthesis Checker..!!!!" << endl;
-    cout << "\nEnter the expression to check whether it is in well form or not: ";
-    cin >> exp;
+    cout << "\nEnter string to be reversed and check if it is palindrome or not: \n\n";
+    cin.getline(str, 50);
 
-    if ((exp[0] == ')') || (exp[0] == ']') || (exp[0] == '}')) {
-        cout << "\nInvalid Expression.....\n";
-        return 0;
-    } else {
-        while (exp[i] != '\0') {
-            ch = exp[i];
-            switch (ch) {
-            case '(':
-            case '[':
-            case '{':
-                s1.push(ch);
-                break;
-            case ')':
-            case ']':
-            case '}':
-                if (s1.isempty()) {
-                    cout << "\nInvalid Expression.....\n";
-                    return 0;
-                }
-                s1.pop();
-                break;
-            }
-            i = i + 1;
-        }
+    stack.convert(str);
+
+    while (str[i] != '\0') {
+        stack.push(str[i]);
+        i++;
     }
 
-    if (s1.isempty()) {
-        cout << "\nExpression is well parenthesized...\n";
-    } else {
-        cout << "\nSorry!!! Invalid Expression or not well parenthesized...\n";
-    }
+    stack.palindrome();
+    stack.reverse();
 
     return 0;
 }
 ```
 
-### Key Fixes:
-1. **Proper Indentation**:
-   - Adjusted every block and nested scope to enhance readability.
-2. **Handled `stack` full condition**:
-   - Updated `isfull()` to check `size - 1` (as `size` is the maximum number of elements).
-3. **Better Error Handling**:
-   - Checked for empty stack before popping to avoid invalid operations.
+### Improvements:
+1. **Proper indentation**:
+   - Ensured consistent alignment for better readability.
+2. **Uppercase to lowercase conversion**:
+   - Enhanced logic for clarity.
+3. **Output structure**:
+   - Neatly aligned outputs for stack operations and palindrome results.
 
-Let me know if you need further adjustments or explanations!
+Let me know if you need further assistance!
